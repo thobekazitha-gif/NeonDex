@@ -1,0 +1,32 @@
+<input 
+  [(ngModel)]="searchQuery" 
+  (keyup.enter)="searchPokemon()"
+  placeholder="Search Pokémon by name..." 
+  class="w-full max-w-xl mx-auto block p-3 mb-8 bg-black border-2 border-neon-pink rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-neon-pink shadow-neon"
+/>
+
+<div *ngIf="loading" class="flex justify-center my-20">
+  <app-loading-spinner></app-loading-spinner>
+</div>
+
+<app-error-message *ngIf="error" [message]="error"></app-error-message>
+
+<div *ngIf="!loading && !error" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+  <app-pokemon-card *ngFor="let pokemon of pokemonList" [pokemon]="pokemon"></app-pokemon-card>
+</div>
+
+<div class="flex justify-between mt-10 max-w-4xl mx-auto">
+  <button 
+    (click)="prevPage()" 
+    [disabled]="offset === 0"
+    class="px-6 py-3 bg-pink-gradient rounded-lg text-white font-semibold disabled:opacity-40 disabled:cursor-not-allowed shadow-neon hover:shadow-xl transition-all"
+  >
+    Previous
+  </button>
+  <button 
+    (click)="nextPage()"
+    class="px-6 py-3 bg-pink-gradient rounded-lg text-white font-semibold shadow-neon hover:shadow-xl transition-all"
+  >
+    Next
+  </button>
+</div>

@@ -1,0 +1,29 @@
+<div *ngIf="pokemon" class="max-w-4xl mx-auto p-8 animate-fade-in">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center bg-black/40 backdrop-blur-md p-10 rounded-3xl border border-pink-500/20">
+    
+    <div class="text-center">
+      <img [src]="pokemon.sprite" class="w-full max-w-sm mx-auto drop-shadow-[0_0_30px_rgba(255,45,85,0.6)]">
+      <div class="flex gap-2 justify-center mt-6">
+        <span *ngFor="let t of pokemon.types" class="px-4 py-1 rounded-full border border-pink-500 text-pink-500 text-xs uppercase">{{ t }}</span>
+      </div>
+    </div>
+
+    <div>
+      <h1 class="text-5xl font-black text-white uppercase mb-2">{{ pokemon.name }}</h1>
+      <p class="text-pink-500 font-mono mb-8">COMPAT_RATING: {{ pokemon.combatRating }}%</p>
+      
+      <div class="space-y-4">
+        <div *ngFor="let s of pokemon.stats">
+          <div class="flex justify-between text-xs text-zinc-400 mb-1">
+            <span>{{ s.name | uppercase }}</span>
+            <span>{{ s.value }}</span>
+          </div>
+          <div class="h-1 bg-zinc-800 rounded-full overflow-hidden">
+            <div class="h-full bg-pink-500 shadow-[0_0_10px_#ff2d55]" [style.width.%]="(s.value/200)*100"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-[#050505] text-white overflow-x-hidden;
+  background-image: radial-gradient(circle at 50% -20%, #3a001a 0%, #050505 80%);
+  min-height: 100vh;
+}
+
+/* Custom Pink Glow Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb { background: #FF2D55; border-radius: 10px; }
+
+.neon-text-glow {
+  text-shadow: 0 0 10px rgba(255, 45, 85, 0.8);
+}

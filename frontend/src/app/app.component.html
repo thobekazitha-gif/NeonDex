@@ -1,0 +1,49 @@
+<main class="min-h-screen p-8">
+  <header class="flex justify-between items-center mb-12 border-b border-pink-900/30 pb-6">
+    <h1 class="text-4xl font-black tracking-tighter neon-text-glow">
+      NEON<span class="text-neon-pink">DEX</span>
+    </h1>
+    <div class="px-4 py-1 border border-neon-pink text-neon-pink text-xs font-mono uppercase tracking-widest rounded-full shadow-pink-glow">
+      System Online
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    @for (p of pokemonList; track p.id) {
+      <div class="group relative p-[1px] rounded-2xl bg-zinc-800 hover:bg-gradient-to-b hover:from-neon-pink hover:to-transparent transition-all duration-500">
+        <div class="bg-black/80 backdrop-blur-xl rounded-2xl p-6 h-full flex flex-col items-center">
+          <span class="self-start text-[10px] font-mono text-zinc-500 uppercase">Archive_{{p.id}}</span>
+          
+          <img [src]="p.sprite" class="w-40 h-40 object-contain my-4 filter grayscale group-hover:grayscale-0 transition-all duration-500 scale-95 group-hover:scale-105">
+          
+          <h2 class="text-2xl font-bold tracking-tight mb-2 uppercase">{{p.name}}</h2>
+          
+          <div class="flex gap-2 mb-6">
+            @for (type of p.types; track type) {
+              <span class="text-[9px] px-2 py-0.5 border border-zinc-700 rounded-md text-zinc-400 uppercase tracking-tighter">
+                {{type}}
+              </span>
+            }
+          </div>
+
+          <div class="w-full space-y-2 mt-auto">
+            <div class="flex justify-between text-[10px] font-mono">
+              <span class="text-zinc-500">POWER_SCORE</span>
+              <span class="text-neon-pink">{{p.powerScore}}%</span>
+            </div>
+            <div class="w-full bg-zinc-900 h-1.5 rounded-full overflow-hidden">
+              <div class="bg-neon-pink h-full transition-all duration-1000 shadow-[0_0_8px_#FF2D55]" 
+                   [style.width.%]="p.powerScore"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="flex items-center gap-3 cursor-pointer" routerLink="/">
+  <img src="assets/logo.png" alt="NeonDex Logo" class="h-8 w-auto drop-shadow-[0_0_8px_rgba(255,45,85,0.8)]">
+  <span class="font-black tracking-[0.2em] text-white uppercase text-xl">NEON<span class="text-pink-500">DEX</span></span>
+</div>
+
+</main>
