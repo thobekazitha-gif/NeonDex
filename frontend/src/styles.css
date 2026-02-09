@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 /* 1. MUST BE AT THE VERY TOP */
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400&display=swap');
 
+=======
+/* 1. Fonts MUST be first */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400&display=swap');
+
+/* 2. Tailwind directives second */
+>>>>>>> a984acf0ad8a97014e7548898aae8eb9bfbd339f
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -9,6 +16,7 @@
   --neon-pink: #FF69B4;
 }
 
+<<<<<<< HEAD
 /* Force everything to center globally */
 body {
   margin: 0;
@@ -27,6 +35,13 @@ app-root {
 
 /* Force the grid background */
 .cyber-grid {
+=======
+body {
+  margin: 0;
+  background-color: #000000;
+  color: #ffffff;
+  overflow-x: hidden;
+>>>>>>> a984acf0ad8a97014e7548898aae8eb9bfbd339f
   background-image: 
     linear-gradient(to right, rgba(255, 105, 180, 0.05) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 105, 180, 0.05) 1px, transparent 1px);
