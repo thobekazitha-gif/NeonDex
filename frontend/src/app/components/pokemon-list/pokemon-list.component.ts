@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { RouterLink } from '@angular/router';
+import { Component, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { PokemonService } from '../../services/pokemon.service';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
@@ -10,55 +10,59 @@ import { ErrorMessageComponent } from '../error-message/error-message.component'
 @Component({
   selector: 'app-pokemon-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, PokemonCardComponent, LoadingSpinnerComponent, ErrorMessageComponent],
-  templateUrl: './pokemon-list.component.html',
-  styleUrl: './pokemon-list.component.css'
+  imports: [
+    CommonModule,
+    FormsModule,
+    PokemonCardComponent,
+    LoadingSpinnerComponent,
+    ErrorMessageComponent
+  ],
+  templateUrl: './pokemon-list.component.html'
 })
-export class PokemonListComponent implements OnInit {
-  pokemonList: any[] = [];
-  loading = true;
-  error: string | null = null;
-  offset = 0;
-  limit = 20;
+export class PokemonListComponent {
+  private pokemonService = inject(PokemonService);
+  private router = inject(Router);
+
+  pokemonList = signal<any[]>([]);
+  loading = signal(true);
+  error = signal<string | null>(null);
+
   searchQuery = '';
+  offset = signal(0);
+  limit = 20;
 
-  constructor(private http: HttpClient) {}
-
-  ngOnInit() {
-    this.fetchPokemon();
+  constructor() {
+    effect(() => {
+      this.loadPokemon();
+    });
   }
 
-  fetchPokemon() {
-    this.loading = true;
-    this.error = null;
-    this.http.get<any>(`http://localhost:3000/pokemon?limit=${this.limit}&offset=${this.offset}`)
-      .subscribe({
-        next: (res) => {
-          this.pokemonList = res.results;
-          this.loading = false;
-        },
-        error: () => {
-          this.error = 'Failed to load Pokémon list';
-          this.loading = false;
-        }
-      });
+  loadPokemon() {
+    this.loading.set(true);
+    this.error.set(null);
+    this.pokemonService.getPokemonList(this.limit, this.offset()).subscribe({
+      next: (res) => {
+        this.pokemonList.set(res.results);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set('Failed to load Pokémon list');
+        this.loading.set(false);
+      }
+    });
   }
 
   nextPage() {
-    this.offset += this.limit;
-    this.fetchPokemon();
+    this.offset.update(v => v + this.limit);
   }
 
   prevPage() {
-    if (this.offset >= this.limit) {
-      this.offset -= this.limit;
-      this.fetchPokemon();
-    }
+    if (this.offset() > 0) this.offset.update(v => Math.max(0, v - this.limit));
   }
 
-  searchPokemon() {
+  onSearch() {
     if (this.searchQuery.trim()) {
-      window.location.href = `/pokemon/${this.searchQuery.trim().toLowerCase()}`;
+      this.router.navigate(['/pokemon', this.searchQuery.trim().toLowerCase()]);
     }
   }
 }
