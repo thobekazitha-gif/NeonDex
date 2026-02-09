@@ -1,0 +1,54 @@
+<div class="space-y-12">
+  <div class="max-w-2xl mx-auto relative group">
+    <div class="absolute inset-0 bg-[#FF69B4] blur-xl opacity-5 group-hover:opacity-15 transition-opacity"></div>
+    
+    <input
+      [(ngModel)]="searchQuery"
+      (keyup.enter)="onSearch()"
+      type="text"
+      placeholder="SEARCH POKÉMON TERMINAL..."
+      class="relative w-full p-5 bg-black/80 border-2 border-[#FF69B4]/30 rounded-xl text-white text-lg font-mono tracking-widest placeholder:text-[#FF69B4]/30 focus:outline-none focus:border-[#FF69B4] focus:ring-4 focus:ring-[#FF69B4]/10 transition-all"
+    >
+    <div class="absolute right-5 top-5 text-[#FF69B4]/40 font-mono text-xs uppercase hidden md:block">
+      [Press Enter]
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="flex flex-col items-center py-20">
+      <app-loading-spinner />
+      <p class="mt-4 font-mono text-[#FF69B4] animate-pulse tracking-[0.3em] uppercase text-xs">Accessing Database...</p>
+    </div>
+  } @else if (error(); as errMsg) {
+    <div class="border border-red-500/30 bg-red-500/5 p-8 rounded-xl">
+      <app-error-message [message]="errMsg" />
+    </div>
+  } @else {
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-8">
+      @for (poke of pokemonList(); track poke.name) {
+        <div class="transform transition-all duration-300 hover:-translate-y-2">
+          <app-pokemon-card [pokemon]="poke" />
+        </div>
+      }
+    </div>
+
+    <div class="flex justify-center items-center gap-10 mt-16 pt-10 border-t border-[#FF69B4]/10">
+      <button
+        [disabled]="offset() === 0"
+        (click)="prevPage()"
+        class="group flex items-center gap-3 px-10 py-4 bg-black border border-[#FF69B4]/40 text-[#FF69B4] font-mono tracking-widest rounded-lg disabled:opacity-20 disabled:cursor-not-allowed hover:bg-[#FF69B4] hover:text-black transition-all"
+      >
+        <span class="group-hover:-translate-x-1 transition-transform">←</span> PREV_DATA
+      </button>
+
+      <div class="hidden md:block h-1 w-20 bg-gradient-to-r from-transparent via-[#FF69B4]/20 to-transparent"></div>
+
+      <button
+        (click)="nextPage()"
+        class="group flex items-center gap-3 px-10 py-4 bg-black border border-[#FF69B4]/40 text-[#FF69B4] font-mono tracking-widest rounded-lg hover:bg-[#FF69B4] hover:text-black transition-all shadow-[0_0_15px_rgba(255,105,180,0)] hover:shadow-[0_0_20px_rgba(255,105,180,0.4)]"
+      >
+        NEXT_DATA <span class="group-hover:translate-x-1 transition-transform">→</span>
+      </button>
+    </div>
+  }
+</div>
