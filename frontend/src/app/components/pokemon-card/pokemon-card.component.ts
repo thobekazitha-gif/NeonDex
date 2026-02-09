@@ -1,5 +1,4 @@
-// pokemon-card.component.ts
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -7,17 +6,17 @@ import { CommonModule } from '@angular/common';
   selector: 'app-pokemon-card',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  templateUrl: './pokemon-card.component.html',
-  styleUrl: './pokemon-card.component.css'
+  templateUrl: './pokemon-card.component.html'
 })
 export class PokemonCardComponent {
-  @Input() pokemon!: any;
+  pokemon = input.required<any>();
 
-  get id(): string {
-    return this.pokemon.url.split('/').slice(-2, -1)[0];
+  get id() {
+    const urlParts = this.pokemon().url.split('/');
+    return urlParts[urlParts.length - 2];
   }
 
-  get sprite(): string {
+  get imageUrl() {
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${this.id}.png`;
   }
 }
