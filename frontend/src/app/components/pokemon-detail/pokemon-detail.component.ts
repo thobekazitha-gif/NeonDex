@@ -1,7 +1,6 @@
-// pokemon-detail.component.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { PokemonService } from '../../services/pokemon.service';
 import { CommonModule } from '@angular/common';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { ErrorMessageComponent } from '../error-message/error-message.component';
@@ -10,39 +9,36 @@ import { ErrorMessageComponent } from '../error-message/error-message.component'
   selector: 'app-pokemon-detail',
   standalone: true,
   imports: [CommonModule, LoadingSpinnerComponent, ErrorMessageComponent],
-  templateUrl: './pokemon-detail.component.html',
-  styleUrl: './pokemon-detail.component.css'
+  templateUrl: './pokemon-detail.component.html'
 })
-export class PokemonDetailComponent implements OnInit {
-  pokemon: any = null;
-  loading = true;
-  error: string | null = null;
+export class PokemonDetailComponent {
+  private route = inject(ActivatedRoute);
+  private pokemonService = inject(PokemonService);
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  pokemon = signal<any>(null);
+  loading = signal(true);
+  error = signal<string | null>(null);
 
-  ngOnInit() {
+  constructor() {
     const name = this.route.snapshot.paramMap.get('name');
-    if (name) {
-      this.fetchDetail(name);
-    }
+    if (name) this.loadDetail(name);
   }
 
-  fetchDetail(name: string) {
-    this.loading = true;
-    this.http.get<any>(`http://localhost:3000/pokemon/${name}`)
-      .subscribe({
-        next: (data) => {
-          this.pokemon = data;
-          this.loading = false;
-        },
-        error: (err) => {
-          this.error = err.error?.error || 'Failed to load Pokémon details';
-          this.loading = false;
-        }
-      });
+  loadDetail(name: string) {
+    this.loading.set(true);
+    this.pokemonService.getPokemonDetail(name).subscribe({
+      next: (data) => {
+        this.pokemon.set(data);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.error.set(err?.error?.error || 'Failed to load Pokémon');
+        this.loading.set(false);
+      }
+    });
   }
 
-  getStatWidth(base: number): string {
-    return `${(base / 255) * 100}%`;
+  getStatPercentage(base: number): string {
+    return `${Math.min((base / 255) * 100, 100)}%`;
   }
 }
