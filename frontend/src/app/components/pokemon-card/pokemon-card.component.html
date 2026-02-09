@@ -1,12 +1,10 @@
-<div [routerLink]="['/pokemon', pokemon.name]" 
-     class="group relative cursor-pointer p-[1px] rounded-2xl bg-gradient-to-b from-pink-500/50 to-transparent hover:from-pink-500 transition-all duration-500">
-  <div class="bg-[#0a0a0a] rounded-2xl p-6 text-center shadow-2xl">
-    <div class="absolute top-4 right-4 text-[10px] font-mono text-pink-500 uppercase tracking-tighter">
-      System.Stable
-    </div>
-    <img [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/' + extractId(pokemon.url) + '.png'" 
-         class="w-32 h-32 mx-auto drop-shadow-[0_0_15px_rgba(255,20,147,0.4)] group-hover:scale-110 transition-transform duration-300">
-    <h3 class="text-white font-bold mt-4 uppercase tracking-widest">{{ pokemon.name }}</h3>
-    <div class="mt-4 h-[2px] w-0 group-hover:w-full bg-pink-500 transition-all duration-500 mx-auto"></div>
-  </div>
-</div>
+<a
+  [routerLink]="['/pokemon', pokemon().name]"
+  class="block p-6 rounded-2xl border border-neon-pink/50 hover:border-neon-pink hover:shadow-[0_0_30px_rgba(255,105,180,0.4)] transition-all duration-300 bg-black/70 backdrop-blur-sm"
+  style="background: linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(255,105,180,0.1));"
+>
+  <img [src]="imageUrl" [alt]="pokemon().name" class="mx-auto h-36 w-36 object-contain drop-shadow-2xl">
+  <h3 class="mt-5 text-center text-xl font-bold capitalize tracking-wide">
+    {{ pokemon().name }}
+  </h3>
+</a>
