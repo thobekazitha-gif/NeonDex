@@ -1,0 +1,28 @@
+<div class="cyber-grid" style="min-height: 100vh; background-color: black; color: white; display: flex; flex-direction: column; align-items: center;">
+  
+  <header style="width: 100%; padding: 4rem 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255, 105, 180, 0.2); background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);">
+    
+    <div style="position: relative;">
+      <div style="position: absolute; inset: -20px; background: #FF69B4; filter: blur(50px); opacity: 0.2;"></div>
+      <img src="/assets/logo.jpg" alt="Logo" style="position: relative; height: 200px; width: auto; filter: drop-shadow(0 0 20px #FF69B4);">
+    </div>
+
+    <h1 style="font-family: 'Orbitron', sans-serif; font-size: 4rem; margin-top: 1.5rem; text-transform: uppercase; letter-spacing: -2px; color: white; text-shadow: 0 0 15px #FF69B4;">
+      NeonDex
+    </h1>
+    
+    <p style="font-family: 'JetBrains Mono', monospace; color: #FF69B4; letter-spacing: 0.5em; text-transform: uppercase; font-size: 0.8rem; opacity: 0.8; margin-top: 1rem;">
+      — Cyberpunk Pokédex Protocol —
+    </p>
+  </header>
+
+  <main style="width: 100%; max-width: 1000px; padding: 3rem 1.5rem; flex-grow: 1;">
+    <div style="background: rgba(20, 20, 20, 0.8); border: 1px solid rgba(255, 105, 180, 0.2); border-radius: 20px; padding: 2rem; box-shadow: 0 0 40px rgba(0,0,0,0.5);">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <footer style="padding: 2rem; opacity: 0.4; font-family: monospace; font-size: 10px; letter-spacing: 3px;">
+    &copy; 2026 NEONDEX_TERMINAL // STATUS: ONLINE
+  </footer>
+</div>

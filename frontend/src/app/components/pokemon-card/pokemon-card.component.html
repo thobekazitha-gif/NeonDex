@@ -1,10 +1,20 @@
-<a
-  [routerLink]="['/pokemon', pokemon().name]"
-  class="block p-6 rounded-2xl border border-neon-pink/50 hover:border-neon-pink hover:shadow-[0_0_30px_rgba(255,105,180,0.4)] transition-all duration-300 bg-black/70 backdrop-blur-sm"
-  style="background: linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(255,105,180,0.1));"
->
-  <img [src]="imageUrl" [alt]="pokemon().name" class="mx-auto h-36 w-36 object-contain drop-shadow-2xl">
-  <h3 class="mt-5 text-center text-xl font-bold capitalize tracking-wide">
-    {{ pokemon().name }}
-  </h3>
-</a>
+<div [routerLink]="['/pokemon', pokemon.name]" 
+     class="group relative flex flex-col items-center p-6 bg-slate-900/40 border border-fuchsia-500/10 rounded-2xl hover:border-fuchsia-500/50 hover:bg-slate-900/60 transition-all duration-500 cursor-pointer overflow-hidden">
+  
+  <div class="absolute -inset-px bg-gradient-to-b from-fuchsia-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+  
+  <div class="relative w-32 h-32 mb-4 group-hover:scale-110 transition-transform duration-500">
+    <img [src]="pokemon.sprites.other['official-artwork'].front_default" 
+         [alt]="pokemon.name"
+         class="w-full h-full object-contain drop-shadow-[0_0_15px_rgba(240,172,255,0.4)]">
+  </div>
+
+  <div class="relative w-full text-center">
+    <span class="text-[10px] font-mono text-fuchsia-500/50 tracking-widest uppercase">
+      #{{ pokemon.id.toString().padStart(3, '0') }}
+    </span>
+    <h3 class="text-lg font-bold text-white uppercase tracking-tighter group-hover:text-fuchsia-400 transition-colors">
+      {{ pokemon.name }}
+    </h3>
+  </div>
+</div>
