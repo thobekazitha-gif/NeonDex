@@ -1,0 +1,67 @@
+<div class="min-h-screen relative text-slate-50 selection:bg-fuchsia-500/30">
+  <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-4xl">
+    <div class="glass-nav rounded-full px-8 py-3 flex items-center justify-between border border-fuchsia-500/10 shadow-2xl shadow-black/50">
+      <button 
+        routerLink="/"
+        class="flex items-center group outline-none">
+        <span class="text-xl font-black tracking-tight uppercase flex">
+          <span class="nav-logo-neon">Neon</span>
+          <span class="nav-logo-dex">Dex</span>
+        </span>
+      </button>
+      
+      <div class="hidden md:flex items-center gap-6">
+        <button 
+          routerLink="/"
+          routerLinkActive="text-fuchsia-400"
+          [routerLinkActiveOptions]="{exact: true}"
+          class="text-xs font-bold uppercase tracking-widest transition-colors outline-none text-slate-400 hover:text-fuchsia-400">
+          Pokémon
+        </button>
+        <button 
+          routerLink="/abilities"
+          routerLinkActive="text-fuchsia-400"
+          class="text-xs font-bold uppercase tracking-widest transition-colors outline-none text-slate-400 hover:text-fuchsia-400">
+          Abilities
+        </button>
+        <button 
+          routerLink="/types"
+          routerLinkActive="text-fuchsia-400"
+          class="text-xs font-bold uppercase tracking-widest transition-colors outline-none text-slate-400 hover:text-fuchsia-400">
+          Types
+        </button>
+      </div>    
+      <div class="flex items-center">
+        <button 
+          (click)="neuralLink()"
+          class="bg-fuchsia-500 text-white px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all shadow-[0_0_20px_rgba(217,70,239,0.3)] outline-none">
+          Neural Link
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="relative z-10 pt-24">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<style>
+  .glass-nav {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .nav-logo-neon {
+    background: linear-gradient(180deg, #7c3aed 0%, #d946ef 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 1px 1px 0 #4c1d95;
+  }
+  
+  .nav-logo-dex {
+    color: #ffffff;
+    text-shadow: 1px 1px 0 #94a3b8;
+  }
+</style>
