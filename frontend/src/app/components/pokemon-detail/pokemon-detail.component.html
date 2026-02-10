@@ -1,66 +1,133 @@
-@if (loading()) {
-  <app-loading-spinner />
-} @else if (error(); as err) {
-  <app-error-message [message]="err" />
-} @else if (pokemon(); as p) {
-  <div class="max-w-3xl mx-auto">
-    <div class="bg-black/80 border border-neon-pink/60 rounded-3xl p-8 md:p-12 shadow-2xl backdrop-blur-md"
-         style="background: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(255,105,180,0.08));">
-      <div class="text-center">
-        <img [src]="p.sprites.front_default" [alt]="p.name"
-             class="mx-auto h-56 w-56 md:h-64 md:w-64 object-contain drop-shadow-2xl animate-pulse-slow">
-        <h1 class="mt-6 text-5xl md:text-6xl font-bold capitalize tracking-wide text-white">
-          {{ p.name }}
-        </h1>
+<div class="min-h-screen pb-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    
+    <button 
+      routerLink="/"
+      class="mb-10 flex items-center gap-3 text-slate-500 hover:text-fuchsia-400 transition-all group font-bold tracking-widest uppercase text-xs">
+      <span class="group-hover:-translate-x-2 transition-transform">←</span>
+      SYSTEM_BACK_TO_BASE
+    </button>
+
+    @if (loading()) {
+      <div class="flex items-center justify-center p-20">
+        <app-loading-spinner />
       </div>
-
-      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-10">
-        <div>
-          <h2 class="text-3xl font-semibold mb-4">Types</h2>
-          <div class="flex flex-wrap gap-3">
-            @for (t of p.types; track t.slot) {
-              <span class="px-5 py-2 bg-neon-pink/20 border border-neon-pink/50 rounded-full text-lg capitalize">
-                {{ t.type.name }}
-              </span>
-            }
-          </div>
-        </div>
-
-        <div>
-          <h2 class="text-3xl font-semibold mb-4">Abilities</h2>
-          <div class="flex flex-wrap gap-3">
-            @for (a of p.abilities; track a.slot) {
-              <span class="px-5 py-2 bg-white/10 border border-white/30 rounded-full text-lg capitalize">
-                {{ a.ability.name }}
-              </span>
-            }
-          </div>
-        </div>
+    } 
+    
+    @else if (error()) {
+      <div class="max-w-xl mx-auto py-20 text-center">
+        <app-error-message [message]="error()!" />
+        <button (click)="ngOnInit()" class="mt-8 px-8 py-3 bg-fuchsia-500/10 border border-fuchsia-500/30 text-fuchsia-400 rounded-xl font-mono text-xs uppercase tracking-widest hover:bg-fuchsia-500/20 transition-all">
+          Retry_Neural_Link
+        </button>
       </div>
-
-      <div class="mt-12">
-        <h2 class="text-3xl font-semibold mb-6">Base Stats</h2>
-        @for (stat of p.stats; track stat.stat.name) {
-          <div class="mb-5">
-            <div class="flex justify-between mb-2 text-lg capitalize">
-              <span>{{ stat.stat.name }}</span>
-              <span>{{ stat.base_stat }}</span>
+    } 
+    
+    @else if (pokemon()) {
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+        
+        <div class="lg:col-span-5 flex flex-col gap-8">
+          <div class="relative w-full aspect-square glass-card rounded-[3rem] p-4 flex items-center justify-center overflow-hidden group">
+            <div class="absolute top-0 right-0 p-12 text-9xl font-black text-white/[0.03] select-none">
+              #{{ pokemon().id.toString().padStart(3, '0') }}
             </div>
-            <div class="h-4 bg-gray-800 rounded-full overflow-hidden">
-              <div
-                class="h-full bg-pink-gradient transition-all duration-1000 ease-out"
-                [style.width]="getStatPercentage(stat.base_stat)"
-              ></div>
+            
+            <!-- Favorite Button -->
+            @if (favoritePokemon()) {
+              <div class="absolute top-6 right-6 z-30" (click)="$event.stopPropagation()">
+                <app-favorite-button 
+                  [pokemon]="favoritePokemon()!"
+                  buttonClass="bg-black/60 backdrop-blur-sm hover:bg-red-500 text-white scale-125">
+                </app-favorite-button>
+              </div>
+            }
+            
+            <img 
+              [src]="pokemon().sprites.other['official-artwork'].front_default" 
+              class="relative z-20 w-[95%] h-[95%] object-contain drop-shadow-[0_20px_60px_rgba(217,70,239,0.4)] transition-transform duration-700 group-hover:scale-110"
+              [alt]="pokemon().name">
+
+            <div class="absolute inset-0 bg-gradient-to-tr from-fuchsia-500/10 via-transparent to-purple-500/10"></div>
+            <div class="absolute top-0 left-0 w-full h-[2px] bg-fuchsia-500/40 shadow-[0_0_20px_#d946ef] animate-scan"></div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="flex-1 glass-card rounded-2xl px-8 py-6">
+              <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em] mb-1">Height</p>
+              <p class="text-white text-2xl font-black">{{ pokemon().height / 10 }}m</p>
+            </div>
+            <div class="flex-1 glass-card rounded-2xl px-8 py-6">
+              <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em] mb-1">Weight</p>
+              <p class="text-white text-2xl font-black">{{ pokemon().weight / 10 }}kg</p>
             </div>
           </div>
-        }
 
-        <div class="mt-8 p-6 bg-black/60 border border-neon-pink/40 rounded-2xl text-center">
-          <p class="text-2xl font-bold text-neon-pink">
-            Strongest: {{ p.strongest_stat }}
-          </p>
+          <!-- COMPUTED FEATURE: Power Rating & Total Stats -->
+          <div class="glass-card rounded-2xl px-8 py-6">
+            <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em] mb-3">Combat Classification</p>
+            <div class="flex items-center justify-between">
+              <span [class]="'text-2xl font-black ' + powerRating().color">{{ powerRating().label }}</span>
+              <div class="text-right">
+                <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em]">Total BST</p>
+                <p class="text-white text-xl font-black">{{ totalBaseStats() }}</p>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <div class="lg:col-span-7 flex flex-col space-y-10">
+          <div>
+            <h2 class="text-[clamp(3rem,8vw,6rem)] font-black capitalize text-white mb-6 tracking-tighter leading-[0.9] text-shadow-neon">
+              {{ pokemon().name }}
+            </h2>
+            <div class="flex flex-wrap gap-4">
+              @for (t of pokemon().types; track t.type.name) {
+                <span 
+                  [class]="'px-8 py-3 rounded-xl text-white text-sm font-black uppercase tracking-[0.2em] shadow-lg ' + getTypeColor(t.type.name)">
+                  {{ t.type.name }}
+                </span>
+              }
+            </div>
+          </div>
+
+          <div class="glass-card rounded-[2.5rem] p-10 md:p-12">
+            <h3 class="text-fuchsia-400 text-[10px] font-bold uppercase tracking-[0.5em] mb-10 opacity-70">Combat_Potential_Analysis</h3>
+            <div class="space-y-8">
+              @for (s of pokemon().stats; track s.stat.name) {
+                <div class="space-y-4">
+                  <div class="flex justify-between text-[11px] font-bold uppercase tracking-[0.2em]">
+                    <div class="flex items-center gap-3">
+                      <span class="text-slate-400">{{ s.stat.name }}</span>
+                      <!-- COMPUTED FEATURE: Highlight Strongest Stat -->
+                      @if (strongestStat() && s.stat.name === strongestStat().stat.name) {
+                        <span class="px-3 py-1 bg-yellow-500/20 border border-yellow-500/40 text-yellow-400 text-[8px] rounded-full">PEAK</span>
+                      }
+                    </div>
+                    <span class="text-white text-lg">{{ s.base_stat }}</span>
+                  </div>
+                  <div class="h-2 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
+                    <div 
+                      [class]="'h-full transition-all duration-[1.5s] ' + (strongestStat() && s.stat.name === strongestStat().stat.name ? 'bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-300 shadow-[0_0_20px_rgba(234,179,8,0.5)]' : 'bg-gradient-to-r from-fuchsia-600 via-purple-500 to-fuchsia-400 shadow-[0_0_20px_rgba(217,70,239,0.5)]')"
+                      [style.width.%]="(s.base_stat / 255) * 100"></div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <div class="glass-card rounded-[2.5rem] p-10">
+            <h3 class="text-fuchsia-400 text-[10px] font-bold uppercase tracking-[0.5em] mb-6 opacity-70">Neural_Abilities</h3>
+            <div class="flex flex-wrap gap-4">
+              @for (a of pokemon().abilities; track a.ability.name) {
+                <div class="bg-white/5 border border-white/5 px-6 py-4 rounded-2xl text-slate-300 font-bold uppercase text-[10px] tracking-widest hover:border-fuchsia-500/50 hover:bg-fuchsia-500/5 transition-all capitalize">
+                  {{ a.ability.name.replace('-', ' ') }}
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
+    }
   </div>
-}
+</div>
