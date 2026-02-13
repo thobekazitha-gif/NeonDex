@@ -10,7 +10,9 @@ export class PokemonService {
 
   constructor(private http: HttpClient) { }
 
-  getPokemonList(limit = 20, offset = 0): Observable<any> {
+  // FIXED: Changed parameter order to match how it's called
+  getPokemonList(offset = 0, limit = 20): Observable<any> {
+    console.log('Fetching Pokemon with offset:', offset, 'limit:', limit); // Debug
     return this.http.get<any>(`${this.apiUrl}/pokemon?limit=${limit}&offset=${offset}`);
   }
 
