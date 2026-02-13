@@ -91,4 +91,8 @@ export class FavoritesComponent {
     };
     return typeColors[type] || 'bg-gray-400';
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05

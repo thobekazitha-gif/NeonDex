@@ -101,6 +101,19 @@ export class PokemonCardComponent implements OnInit {
       fairy: 'bg-pink-400'
     };
     return colors[type] || 'bg-slate-500';
+<<<<<<< HEAD
+  }
+
+  get id(): string {
+    const detail = this.pokemonDetail();
+    return detail ? detail.id.toString().padStart(3, '0') : '000';
+  }
+
+  get imageUrl(): string {
+    const detail = this.pokemonDetail();
+    return detail?.sprites?.other?.['official-artwork']?.front_default || '';
+=======
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
   }
 
   get id(): string {

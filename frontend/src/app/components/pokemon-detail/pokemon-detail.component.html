@@ -59,6 +59,7 @@
             <div class="flex-1 glass-card rounded-2xl px-8 py-6">
               <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em] mb-1">Weight</p>
               <p class="text-white text-2xl font-black">{{ pokemon().weight / 10 }}kg</p>
+<<<<<<< HEAD
             </div>
           </div>
 
@@ -93,6 +94,22 @@
             </div>
           </div>
 
+=======
+            </div>
+          </div>
+
+          <!-- COMPUTED FEATURE: Power Rating & Total Stats -->
+          <div class="glass-card rounded-2xl px-8 py-6">
+            <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em] mb-3">Combat Classification</p>
+            <div class="flex items-center justify-between">
+              <span [class]="'text-2xl font-black ' + powerRating().color">{{ powerRating().label }}</span>
+              <div class="text-right">
+                <p class="text-slate-500 text-[10px] uppercase font-bold tracking-[0.3em]">Total BST</p>
+                <p class="text-white text-xl font-black">{{ totalBaseStats() }}</p>
+              </div>
+            </div>
+          </div>
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
         </div>
 
         <div class="lg:col-span-7 flex flex-col space-y-10">
@@ -150,4 +167,8 @@
       </div>
     }
   </div>
+<<<<<<< HEAD
 </div>
+=======
+</div>
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05

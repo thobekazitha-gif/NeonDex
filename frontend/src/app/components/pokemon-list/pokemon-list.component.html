@@ -8,8 +8,15 @@
     @if (featuredPokemon(); as featured) {
       <div class="relative z-10 flex flex-col items-center animate-float">
         <div class="relative">
+<<<<<<< HEAD
           <div class="absolute bottom-10 left-1/2 -translate-x-1/2 w-[300px] h-[40px] bg-fuchsia-600/20 blur-[30px] rounded-full"></div>
           
+=======
+          <!-- Shadow below pokemon -->
+          <div class="absolute bottom-10 left-1/2 -translate-x-1/2 w-[300px] h-[40px] bg-fuchsia-600/20 blur-[30px] rounded-full"></div>
+          
+          <!-- Featured Pokemon Image -->
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
           <img 
             [src]="featured.sprites.other['official-artwork'].front_default" 
             alt="Featured Unit" 
@@ -17,6 +24,10 @@
           />
         </div>
         
+<<<<<<< HEAD
+=======
+        <!-- Logo overlaid on pokemon -->
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
         <div class="relative -mt-16 md:-mt-24 z-20 select-none pointer-events-none">
           <h1 class="logo-3d text-7xl md:text-[9.5rem] font-black flex items-center tracking-tighter">
             <span class="logo-part-neon block pr-1">Neon</span>
@@ -41,6 +52,7 @@
         </button>
       </div>
 
+<<<<<<< HEAD
       <div class="relative w-full max-w-xl">
         <input
           type="text"
@@ -68,9 +80,56 @@
           {{ filteredPokemon().length }} matches found
         </p>
       }
+=======
+      <!-- Search Box -->
+      <div class="relative w-full">
+        <input
+          type="text"
+          placeholder="Query Identity..."
+          [(ngModel)]="searchQuery"
+          (input)="onSearchInput()"
+          class="w-full bg-black/60 border border-white/10 rounded-full px-14 py-4 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-fuchsia-500/30 transition-all backdrop-blur-xl text-center tracking-widest uppercase text-xs"
+        />
+        <svg class="absolute left-6 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
     </div>
   </section>
 
+  <!-- Grid Section -->
+  <div class="space-y-12 scroll-mt-32" #gridSection id="database-matrix">
+    <div class="flex items-center justify-between">
+      <div class="flex flex-col">
+        <h2 class="text-xs font-black uppercase tracking-[0.5em] text-slate-500">Biological Database Matrix</h2>
+        <span class="text-[10px] text-fuchsia-500/50 font-bold uppercase mt-1">
+          Showing units {{offset() + 1}} - {{Math.min(offset() + limit, totalCount())}} of {{totalCount()}}
+        </span>
+      </div>
+      <div class="h-px flex-1 bg-white/5 mx-8"></div>
+      <div class="flex gap-4">
+        <button 
+          [disabled]="offset() === 0"
+          (click)="prevPage()" 
+          class="p-3 border border-white/10 rounded-full hover:bg-fuchsia-500/10 transition-all text-fuchsia-400 disabled:opacity-20 disabled:cursor-not-allowed group">
+          <svg class="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M15 19l-7-7 7-7" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+        <button 
+          [disabled]="offset() + limit >= totalCount()"
+          (click)="nextPage()" 
+          class="p-3 border border-white/10 rounded-full hover:bg-fuchsia-500/10 transition-all text-fuchsia-400 disabled:opacity-20 disabled:cursor-not-allowed group">
+          <svg class="w-5 h-5 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M9 5l7 7-7 7" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      </div>
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
+    </div>
+  </section>
+
+<<<<<<< HEAD
   <!-- Grid Section -->
   <div class="space-y-12 scroll-mt-32" #gridSection id="database-matrix">
     <div class="flex items-center justify-between">
@@ -111,10 +170,15 @@
       <div class="flex justify-center items-center py-32">
         <app-loading-spinner />
       </div>
+=======
+    @if (loading()) {
+      <app-loading-spinner />
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
     } @else if (error(); as errMsg) {
       <app-error-message [message]="errMsg" />
     } @else {
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 animate-slide-up">
+<<<<<<< HEAD
         @if (searchQuery().trim().length >= 2) {
           @if (filteredPokemon().length > 0) {
             @for (poke of filteredPokemon(); track poke.name) {
@@ -149,6 +213,28 @@
           </button>
         </div>
       }
+=======
+        @for (poke of pokemonList(); track poke.name) {
+          <app-pokemon-card [pokemon]="poke" />
+        }
+      </div>
+      
+      <div class="pt-12 flex justify-center items-center gap-8">
+        <button 
+          [disabled]="offset() === 0"
+          (click)="prevPage()"
+          class="px-8 py-3 rounded-full border border-white/10 text-xs font-bold uppercase tracking-[0.2em] text-slate-400 hover:text-fuchsia-400 hover:border-fuchsia-500/30 transition-all disabled:opacity-20">
+          Previous Page
+        </button>
+        <div class="h-1 w-12 bg-white/10 rounded-full"></div>
+        <button 
+          [disabled]="offset() + limit >= totalCount()"
+          (click)="nextPage()"
+          class="px-8 py-3 rounded-full border border-white/10 text-xs font-bold uppercase tracking-[0.2em] text-slate-400 hover:text-fuchsia-400 hover:border-fuchsia-500/30 transition-all disabled:opacity-20">
+          Next Page
+        </button>
+      </div>
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
     }
   </div>
 </div>
@@ -198,4 +284,8 @@
       transform: translateY(0);
     }
   }
+<<<<<<< HEAD
 </style>
+=======
+</style>
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05

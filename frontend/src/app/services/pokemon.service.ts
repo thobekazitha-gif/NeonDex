@@ -58,6 +58,7 @@ export class PokemonService {
     fairy: { fire: 0.5, fighting: 2, poison: 0.5, dragon: 2, dark: 2, steel: 0.5 }
   };
 
+<<<<<<< HEAD
   constructor(private http: HttpClient) {}
 
   // Method to get paginated list of Pokemon
@@ -65,6 +66,12 @@ export class PokemonService {
     return this.http.get<PokemonListResponse>(
       `${this.apiUrl}/pokemon?offset=${offset}&limit=${limit}`
     );
+=======
+  // FIXED: Changed parameter order to match how it's called
+  getPokemonList(offset = 0, limit = 20): Observable<any> {
+    console.log('Fetching Pokemon with offset:', offset, 'limit:', limit); // Debug
+    return this.http.get<any>(`${this.apiUrl}/pokemon?limit=${limit}&offset=${offset}`);
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
   }
 
   // Method to get detailed Pokemon data by ID or name

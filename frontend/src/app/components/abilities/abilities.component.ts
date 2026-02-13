@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -13,6 +14,17 @@ interface AbilityDetails {
   selector: 'app-abilities',
   standalone: true,
   imports: [CommonModule, LoadingSpinnerComponent, RouterLink],
+=======
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { PokemonService } from '../../services/pokemon.service';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
+
+@Component({
+  selector: 'app-abilities',
+  standalone: true,
+  imports: [CommonModule, LoadingSpinnerComponent],
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
   templateUrl: './abilities.component.html'
 })
 export class AbilitiesComponent implements OnInit {
@@ -20,6 +32,7 @@ export class AbilitiesComponent implements OnInit {
 
   abilities = signal<any[]>([]);
   loading = signal<boolean>(true);
+<<<<<<< HEAD
   selectedAbility = signal<string | null>(null);
   showStrongestOnly = signal<boolean>(false);
   abilityDetails = signal<Map<string, AbilityDetails>>(new Map());
@@ -56,11 +69,14 @@ export class AbilitiesComponent implements OnInit {
     
     return strongest;
   });
+=======
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
 
   ngOnInit(): void {
     this.loadAbilities();
   }
 
+<<<<<<< HEAD
   async loadAbilities(): Promise<void> {
     this.loading.set(true);
     try {
@@ -140,3 +156,20 @@ export class AbilitiesComponent implements OnInit {
     return colors[index % colors.length];
   }
 }
+=======
+  loadAbilities(): void {
+    this.loading.set(true);
+    // Fetch first 100 abilities
+    fetch('https://pokeapi.co/api/v2/ability?limit=100')
+      .then(response => response.json())
+      .then(data => {
+        this.abilities.set(data.results);
+        this.loading.set(false);
+      })
+      .catch(error => {
+        console.error('Failed to load abilities', error);
+        this.loading.set(false);
+      });
+  }
+}
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05

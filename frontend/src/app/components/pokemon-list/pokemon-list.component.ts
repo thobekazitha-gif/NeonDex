@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
+=======
+import { Component, ElementRef, inject, OnInit, signal, computed, ViewChild } from '@angular/core';
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -27,19 +31,28 @@ interface PokemonListResponse {
 })
 export class PokemonListComponent implements OnInit {
   @ViewChild('gridSection') gridSection!: ElementRef;
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
   private pokemonService = inject(PokemonService);
   private router = inject(Router);
 
   pokemonList = signal<any[]>([]);
+<<<<<<< HEAD
   filteredPokemon = signal<any[]>([]);
   allPokemon = signal<any[]>([]); // Store all Pokemon with their details
   featuredPokemon = signal<any>(null);
 
+=======
+  featuredPokemon = signal<any>(null);
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
   loading = signal<boolean>(true);
   error = signal<string | null>(null);
   offset = signal<number>(0);
   totalCount = signal<number>(0);
+<<<<<<< HEAD
 
   searchQuery = signal<string>('');
   private searchSubject = new Subject<string>();
@@ -141,11 +154,48 @@ export class PokemonListComponent implements OnInit {
       },
       error: () => {
         this.error.set('Failed to load Pokémon');
+=======
+  searchQuery = '';
+  selectedTypeFilter = signal<string>('all');
+  
+  readonly limit = 15;
+  
+  Math = Math;
+
+  // Available types for filtering
+  availableTypes = [
+    'all', 'normal', 'fire', 'water', 'electric', 'grass', 'ice',
+    'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug',
+    'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy'
+  ];
+
+  ngOnInit(): void {
+    this.loadPokemon();
+    this.loadFeaturedPokemon();
+  }
+
+  loadPokemon(): void {
+    console.log('Loading Pokemon with offset:', this.offset(), 'limit:', this.limit);
+    this.loading.set(true);
+    this.error.set(null);
+    
+    this.pokemonService.getPokemonList(this.offset(), this.limit).subscribe({
+      next: (data: any) => {
+        console.log('Received Pokemon:', data.results.map((p: any) => p.name));
+        this.pokemonList.set(data.results);
+        this.totalCount.set(data.count);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        console.error('Error loading pokemon:', err);
+        this.error.set('Neural Link failed.');
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
         this.loading.set(false);
       }
     });
   }
 
+<<<<<<< HEAD
   nextPage(): void {
     if (this.searchQuery().trim().length >= 2) return;
     if (this.offset() + this.limit >= this.totalCount()) return;
@@ -180,5 +230,70 @@ export class PokemonListComponent implements OnInit {
       next: (data) => this.featuredPokemon.set(data),
       error: (err) => console.error('Featured load failed', err)
     });
+=======
+  loadFeaturedPokemon(): void {
+    this.pokemonService.getPokemonDetail('196').subscribe({
+      next: (data: any) => {
+        this.featuredPokemon.set(data);
+      },
+      error: (err: any) => {
+        console.error('Failed to load featured pokemon', err);
+      }
+    });
+  }
+
+  onSearchInput(): void {
+    if (this.searchQuery.length > 2) {
+      this.loading.set(true);
+      this.pokemonService.getPokemonDetail(this.searchQuery.toLowerCase()).subscribe({
+        next: (data: any) => {
+          this.pokemonList.set([{ name: data.name, url: '' }]);
+          this.loading.set(false);
+        },
+        error: () => {
+          this.pokemonList.set([]);
+          this.loading.set(false);
+        }
+      });
+    } else if (this.searchQuery.length === 0) {
+      this.loadPokemon();
+    }
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
+  }
+
+  scrollToGrid(): void {
+    setTimeout(() => {
+      this.gridSection?.nativeElement?.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }, 100);
+  }
+
+  neuralLink(): void {
+    const randomId = Math.floor(Math.random() * 800) + 1;
+    this.router.navigate(['/pokemon', randomId]);
+  }
+
+  nextPage(): void {
+    console.log('Next page clicked. Current offset:', this.offset());
+    if (this.offset() + this.limit < this.totalCount()) {
+      const newOffset = this.offset() + this.limit;
+      console.log('Setting new offset to:', newOffset);
+      this.offset.set(newOffset);
+      this.loadPokemon();
+      this.scrollToGrid();
+    }
+  }
+
+  prevPage(): void {
+    console.log('Previous page clicked. Current offset:', this.offset());
+    if (this.offset() > 0) {
+      const newOffset = Math.max(0, this.offset() - this.limit);
+      console.log('Setting new offset to:', newOffset);
+      this.offset.set(newOffset);
+      this.loadPokemon();
+      this.scrollToGrid();
+    }
   }
 }

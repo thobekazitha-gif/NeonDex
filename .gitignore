@@ -1,3 +1,14 @@
+<<<<<<< HEAD
 node_modules/
 dist/
 .angular/
+=======
+﻿backend/node_modules/
+frontend/node_modules/
+
+node_modules/
+dist/
+.angular/
+
+.env
+>>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
