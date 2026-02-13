@@ -1,50 +1,74 @@
-<<<<<<< HEAD
-/* 1. MUST BE AT THE VERY TOP */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400&display=swap');
-
-=======
-/* 1. Fonts MUST be first */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400&display=swap');
-
-/* 2. Tailwind directives second */
->>>>>>> a984acf0ad8a97014e7548898aae8eb9bfbd339f
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --neon-pink: #FF69B4;
+  --plus-jakarta: 'Plus Jakarta Sans', sans-serif;
 }
 
-<<<<<<< HEAD
-/* Force everything to center globally */
 body {
+  font-family: var(--plus-jakarta);
+  background-color: #05010a;
+  color: #f8fafc;
   margin: 0;
-  padding: 0;
-  background-color: #000 !important;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* This targets the Angular Root tag specifically */
-app-root {
-  display: block;
-  width: 100%;
-}
-
-/* Force the grid background */
-.cyber-grid {
-=======
-body {
-  margin: 0;
-  background-color: #000000;
-  color: #ffffff;
   overflow-x: hidden;
->>>>>>> a984acf0ad8a97014e7548898aae8eb9bfbd339f
-  background-image: 
-    linear-gradient(to right, rgba(255, 105, 180, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 105, 180, 0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
-  background-attachment: fixed;
 }
+
+/* Organic Neon Blobs */
+.bg-aura {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: #05010a;
+  overflow: hidden;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.12;
+  animation: move 25s infinite alternate;
+}
+
+.blob-1 { width: 700px; height: 700px; background: #4c1d95; top: -15%; left: -10%; }
+.blob-2 { width: 600px; height: 600px; background: #701a75; bottom: -10%; right: 5%; animation-delay: -5s; }
+.blob-3 { width: 500px; height: 500px; background: #1e1b4b; top: 30%; left: 20%; animation-delay: -10s; }
+
+@keyframes move {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(150px, 80px) scale(1.1); }
+}
+
+.noise {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url('https://grainy-gradients.vercel.app/noise.svg');
+}
+
+/* Glassmorphism Classes */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(168, 85, 247, 0.4);
+  box-shadow: 0 20px 40px -20px rgba(168, 85, 247, 0.3);
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+.animate-scan { animation: scan 4s linear infinite; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: #1e1b4b; border-radius: 10px; }

@@ -1,28 +1,67 @@
-<div class="cyber-grid" style="min-height: 100vh; background-color: black; color: white; display: flex; flex-direction: column; align-items: center;">
-  
-  <header style="width: 100%; padding: 4rem 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255, 105, 180, 0.2); background: rgba(0,0,0,0.5); backdrop-filter: blur(10px);">
-    
-    <div style="position: relative;">
-      <div style="position: absolute; inset: -20px; background: #FF69B4; filter: blur(50px); opacity: 0.2;"></div>
-      <img src="/assets/logo.jpg" alt="Logo" style="position: relative; height: 200px; width: auto; filter: drop-shadow(0 0 20px #FF69B4);">
+<div class="min-h-screen relative text-slate-50 selection:bg-fuchsia-500/30">
+  <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[90%] max-w-4xl">
+    <div class="glass-nav rounded-full px-8 py-3 flex items-center justify-between border border-fuchsia-500/10 shadow-2xl shadow-black/50">
+      <button 
+        routerLink="/"
+        class="flex items-center group outline-none">
+        <span class="text-xl font-black tracking-tight uppercase flex">
+          <span class="nav-logo-neon">Neon</span>
+          <span class="nav-logo-dex">Dex</span>
+        </span>
+      </button>
+      
+      <div class="hidden md:flex items-center gap-6">
+        <button 
+          routerLink="/"
+          routerLinkActive="text-fuchsia-400"
+          [routerLinkActiveOptions]="{exact: true}"
+          class="text-xs font-bold uppercase tracking-widest transition-colors outline-none text-slate-400 hover:text-fuchsia-400">
+          Pokémon
+        </button>
+        <button 
+          routerLink="/abilities"
+          routerLinkActive="text-fuchsia-400"
+          class="text-xs font-bold uppercase tracking-widest transition-colors outline-none text-slate-400 hover:text-fuchsia-400">
+          Abilities
+        </button>
+        <button 
+          routerLink="/types"
+          routerLinkActive="text-fuchsia-400"
+          class="text-xs font-bold uppercase tracking-widest transition-colors outline-none text-slate-400 hover:text-fuchsia-400">
+          Types
+        </button>
+      </div>    
+      <div class="flex items-center">
+        <button 
+          (click)="neuralLink()"
+          class="bg-fuchsia-500 text-white px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all shadow-[0_0_20px_rgba(217,70,239,0.3)] outline-none">
+          Neural Link
+        </button>
+      </div>
     </div>
+  </nav>
 
-    <h1 style="font-family: 'Orbitron', sans-serif; font-size: 4rem; margin-top: 1.5rem; text-transform: uppercase; letter-spacing: -2px; color: white; text-shadow: 0 0 15px #FF69B4;">
-      NeonDex
-    </h1>
-    
-    <p style="font-family: 'JetBrains Mono', monospace; color: #FF69B4; letter-spacing: 0.5em; text-transform: uppercase; font-size: 0.8rem; opacity: 0.8; margin-top: 1rem;">
-      — Cyberpunk Pokédex Protocol —
-    </p>
-  </header>
-
-  <main style="width: 100%; max-width: 1000px; padding: 3rem 1.5rem; flex-grow: 1;">
-    <div style="background: rgba(20, 20, 20, 0.8); border: 1px solid rgba(255, 105, 180, 0.2); border-radius: 20px; padding: 2rem; box-shadow: 0 0 40px rgba(0,0,0,0.5);">
-      <router-outlet></router-outlet>
-    </div>
+  <main class="relative z-10 pt-24">
+    <router-outlet></router-outlet>
   </main>
-
-  <footer style="padding: 2rem; opacity: 0.4; font-family: monospace; font-size: 10px; letter-spacing: 3px;">
-    &copy; 2026 NEONDEX_TERMINAL // STATUS: ONLINE
-  </footer>
 </div>
+
+<style>
+  .glass-nav {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .nav-logo-neon {
+    background: linear-gradient(180deg, #7c3aed 0%, #d946ef 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 1px 1px 0 #4c1d95;
+  }
+  
+  .nav-logo-dex {
+    color: #ffffff;
+    text-shadow: 1px 1px 0 #94a3b8;
+  }
+</style>
