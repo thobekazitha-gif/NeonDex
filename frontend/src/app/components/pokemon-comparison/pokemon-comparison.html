@@ -1,0 +1,180 @@
+<div class="min-h-screen pb-20 bg-gradient-to-b from-slate-950 to-black">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-5xl font-black text-center text-fuchsia-400 mb-12 tracking-tighter text-shadow-neon">
+      POKÉMON BATTLE SIMULATOR
+    </h1>
+
+    <!-- Search inputs -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+      <div>
+        <label class="block text-fuchsia-300 text-sm font-bold uppercase tracking-widest mb-2">
+          Pokémon 1
+        </label>
+        <div class="flex gap-3">
+          <input
+            type="text"
+            [(ngModel)]="searchA"
+            (keyup.enter)="loadPokemon(searchA(), 'A')"
+            placeholder="e.g. pikachu"
+            class="flex-1 bg-slate-900/70 border border-fuchsia-500/40 rounded-xl px-5 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-fuchsia-400 focus:ring-2 focus:ring-fuchsia-500/30"
+          />
+          <button
+            (click)="loadPokemon(searchA(), 'A')"
+            [disabled]="loadingA() || !searchA().trim()"
+            class="px-6 py-3 bg-fuchsia-600/80 hover:bg-fuchsia-500 text-white rounded-xl font-bold uppercase tracking-widest transition-all disabled:opacity-50"
+          >
+            Load
+          </button>
+        </div>
+      </div>
+
+      <div class="flex items-end justify-center">
+        <button
+          (click)="swapPokemon()"
+          [disabled]="!pokemonA() || !pokemonB()"
+          class="px-8 py-4 bg-purple-600/70 hover:bg-purple-500 text-white rounded-full font-black text-xl transition-all disabled:opacity-40 shadow-[0_0_20px_rgba(168,85,247,0.5)]"
+        >
+          SWAP
+        </button>
+      </div>
+
+      <div>
+        <label class="block text-fuchsia-300 text-sm font-bold uppercase tracking-widest mb-2">
+          Pokémon 2
+        </label>
+        <div class="flex gap-3">
+          <input
+            type="text"
+            [(ngModel)]="searchB"
+            (keyup.enter)="loadPokemon(searchB(), 'B')"
+            placeholder="e.g. charizard"
+            class="flex-1 bg-slate-900/70 border border-fuchsia-500/40 rounded-xl px-5 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-fuchsia-400 focus:ring-2 focus:ring-fuchsia-500/30"
+          />
+          <button
+            (click)="loadPokemon(searchB(), 'B')"
+            [disabled]="loadingB() || !searchB().trim()"
+            class="px-6 py-3 bg-fuchsia-600/80 hover:bg-fuchsia-500 text-white rounded-xl font-bold uppercase tracking-widest transition-all disabled:opacity-50"
+          >
+            Load
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading / Error -->
+    <div *ngIf="loadingA() || loadingB()" class="text-center py-12">
+      <app-loading-spinner />
+    </div>
+
+    <div *ngIf="error()" class="text-center text-red-400 py-8 text-xl font-bold">
+      {{ error() }}
+    </div>
+
+    <!-- Comparison -->
+    <div *ngIf="pokemonA() && pokemonB()" class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <!-- Pokémon A -->
+      <div class="glass-card rounded-3xl p-8 border border-fuchsia-500/30">
+        <h2 class="text-4xl font-black capitalize text-center mb-6 text-white">{{ pokemonA().name }}</h2>
+        <img
+          [src]="pokemonA().sprites.other['official-artwork'].front_default || 'https://via.placeholder.com/192?text=No+Image'"
+          class="mx-auto w-48 h-48 object-contain drop-shadow-2xl"
+          alt="{{ pokemonA().name }}"
+        />
+        <div class="mt-6 text-center">
+          <p class="text-2xl font-bold text-fuchsia-300">
+            BST: {{ result()?.details?.aTotal ?? '—' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Pokémon B -->
+      <div class="glass-card rounded-3xl p-8 border border-fuchsia-500/30">
+        <h2 class="text-4xl font-black capitalize text-center mb-6 text-white">{{ pokemonB().name }}</h2>
+        <img
+          [src]="pokemonB().sprites.other['official-artwork'].front_default || 'https://via.placeholder.com/192?text=No+Image'"
+          class="mx-auto w-48 h-48 object-contain drop-shadow-2xl"
+          alt="{{ pokemonB().name }}"
+        />
+        <div class="mt-6 text-center">
+          <p class="text-2xl font-bold text-fuchsia-300">
+            BST: {{ result()?.details?.bTotal ?? '—' }}
+          </p>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="lg:col-span-2 glass-card rounded-3xl p-10 mt-8">
+        <h3 class="text-4xl font-black text-center mb-8 text-fuchsia-400 tracking-tighter">
+          BATTLE PREDICTION
+        </h3>
+
+        <div *ngIf="result()" class="text-center mb-10">
+          <p class="text-6xl font-black mb-4"
+             [ngClass]="{
+               'text-green-400': result()!.winner === 'A',
+               'text-red-400': result()!.winner === 'B',
+               'text-yellow-400': result()!.winner === 'Tie'
+             }">
+            {{ result()!.winner === 'A' ? pokemonA()!.name.toUpperCase() + ' WINS' :
+               result()!.winner === 'B' ? pokemonB()!.name.toUpperCase() + ' WINS' :
+               'TIE' }}
+          </p>
+          <p class="text-2xl text-slate-300">
+            ~{{ result()!.winProbabilityA | number:'1.0-0' }}% chance for {{ pokemonA()!.name }}
+          </p>
+        </div>
+
+        <div *ngIf="result()" class="bg-slate-900/50 rounded-2xl p-8 text-slate-200 leading-relaxed">
+          <p class="text-lg font-bold mb-4 uppercase tracking-widest text-fuchsia-300">Analysis:</p>
+          <p class="whitespace-pre-line">{{ result()!.explanation }}</p>
+        </div>
+
+        <div *ngIf="result()" class="mt-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div>
+            <p class="text-slate-400 text-sm uppercase">Type Advantage</p>
+            <p class="text-xl font-bold" [ngClass]="{
+              'text-green-400': result()!.details.aTypeScore > result()!.details.bTypeScore,
+              'text-red-400': result()!.details.aTypeScore <= result()!.details.bTypeScore
+            }">
+              {{ result()!.details.aTypeScore }}
+            </p>
+          </div>
+          <div>
+            <p class="text-slate-400 text-sm uppercase">Speed Edge</p>
+            <p class="text-xl font-bold" [ngClass]="{
+              'text-green-400': result()!.details.aSpeedAdv > 0,
+              'text-red-400': result()!.details.aSpeedAdv <= 0
+            }">
+              {{ result()!.details.aSpeedAdv > 0 ? '+' + result()!.details.aSpeedAdv : result()!.details.aSpeedAdv }}
+            </p>
+          </div>
+          <div>
+            <p class="text-slate-400 text-sm uppercase">Offense</p>
+            <p class="text-xl font-bold" [ngClass]="{
+              'text-green-400': result()!.details.aOffense > result()!.details.bOffense,
+              'text-red-400': result()!.details.aOffense <= result()!.details.bOffense
+            }">
+              {{ result()!.details.aOffense }}
+            </p>
+          </div>
+          <div>
+            <p class="text-slate-400 text-sm uppercase">Total</p>
+            <p class="text-xl font-bold text-white">{{ result()!.details.aTotal }}</p>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <button (click)="clear()" class="px-10 py-4 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold uppercase tracking-widest transition-all">
+            New Comparison
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placeholder when nothing loaded -->
+    <div *ngIf="!pokemonA() && !pokemonB() && !loadingA() && !loadingB()" class="text-center py-20 text-slate-400">
+      <p class="text-2xl font-bold mb-4">Enter two Pokémon names to start battle simulation</p>
+      <p class="text-lg">Example: pikachu vs charizard</p>
+    </div>
+  </div>
+</div>
