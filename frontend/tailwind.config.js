@@ -15,8 +15,4 @@ export default {
     },
   },
   plugins: [],
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05

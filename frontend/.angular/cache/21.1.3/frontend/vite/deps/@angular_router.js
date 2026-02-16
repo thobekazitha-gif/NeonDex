@@ -1,12 +1,7 @@
 import {
   Title
-<<<<<<< HEAD
-} from "./chunk-RLGS4MEJ.js";
-import "./chunk-EQTWUBI5.js";
-=======
-} from "./chunk-UXMLFZ36.js";
-import "./chunk-43XS5UPA.js";
->>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
+} from "./chunk-FAKAQRT7.js";
+import "./chunk-ZHBT6MMX.js";
 import {
   HashLocationStrategy,
   Location,
@@ -16,27 +11,15 @@ import {
   PathLocationStrategy,
   PlatformNavigation,
   ViewportScroller
-<<<<<<< HEAD
-} from "./chunk-V3DETYHY.js";
+} from "./chunk-TWWQOV3H.js";
 import {
   LOCATION_INITIALIZED,
   PlatformLocation
-} from "./chunk-WATNBYZ4.js";
-=======
-} from "./chunk-CGVE6HH2.js";
-import {
-  LOCATION_INITIALIZED,
-  PlatformLocation
-} from "./chunk-AAX7L6FX.js";
->>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
+} from "./chunk-GT53DXAP.js";
 import {
   APP_BOOTSTRAP_LISTENER,
   ApplicationRef,
   Attribute,
-<<<<<<< HEAD
-=======
-  BehaviorSubject,
->>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
   ChangeDetectorRef,
   Compiler,
   Component,
@@ -45,15 +28,8 @@ import {
   DOCUMENT,
   DestroyRef,
   Directive,
-<<<<<<< HEAD
   ENVIRONMENT_INITIALIZER,
   ElementRef,
-=======
-  EMPTY,
-  ENVIRONMENT_INITIALIZER,
-  ElementRef,
-  EmptyError,
->>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
   EnvironmentInjector,
   EventEmitter,
   HostAttributeToken,
@@ -68,15 +44,10 @@ import {
   NgModule,
   NgModuleFactory$1,
   NgZone,
-<<<<<<< HEAD
-=======
-  Observable,
->>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
   Output,
   PendingTasksInternal,
   Renderer2,
   RuntimeError,
-<<<<<<< HEAD
   Version,
   ViewContainerRef,
   afterNextRender,
@@ -84,49 +55,14 @@ import {
   computed,
   createEnvironmentInjector,
   formatRuntimeError,
-=======
-  Subject,
-  Subscription,
-  Version,
-  ViewContainerRef,
-  __spreadProps,
-  __spreadValues,
-  afterNextRender,
-  booleanAttribute,
-  catchError,
-  combineLatest,
-  computed,
-  concat,
-  concatMap,
-  createEnvironmentInjector,
-  defer,
-  filter,
-  finalize,
-  first,
-  formatRuntimeError,
-  from,
->>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
   inject,
   input,
   isInjectable,
   isNgModule,
-<<<<<<< HEAD
   isPromise,
   isStandalone,
   makeEnvironmentProviders,
   performanceMarkFeature,
-=======
-  isObservable,
-  isPromise,
-  isStandalone,
-  makeEnvironmentProviders,
-  map,
-  mergeAll,
-  mergeMap,
-  of,
-  performanceMarkFeature,
-  pipe,
->>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
   promiseWithResolvers,
   provideAppInitializer,
   provideEnvironmentInitializer,
@@ -135,16 +71,6 @@ import {
   runInInjectionContext,
   setClassMetadata,
   signal,
-<<<<<<< HEAD
-=======
-  startWith,
-  switchMap,
-  take,
-  takeLast,
-  takeUntil,
-  tap,
-  throwError,
->>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
   untracked,
   ɵɵNgOnChangesFeature,
   ɵɵattribute,
@@ -164,13 +90,12 @@ import {
   ɵɵloadQuery,
   ɵɵqueryRefresh,
   ɵɵsanitizeUrlOrResourceUrl
-<<<<<<< HEAD
 } from "./chunk-UQRU4LS6.js";
+import "./chunk-4YCCEXQQ.js";
 import {
   defer,
   isObservable
 } from "./chunk-J46EEYGT.js";
-import "./chunk-4YCCEXQQ.js";
 import {
   BehaviorSubject,
   EMPTY,
@@ -201,9 +126,6 @@ import {
   tap,
   throwError
 } from "./chunk-U7EDC2PH.js";
-=======
-} from "./chunk-LEHRZ7IK.js";
->>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
 
 // node_modules/@angular/router/fesm2022/_router-chunk.mjs
 var PRIMARY_OUTLET = "primary";

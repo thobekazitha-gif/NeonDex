@@ -9,18 +9,18 @@ import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.comp
   standalone: true,
   imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './pokemon-comparison.html',
-  // styleUrls removed - file does not exist, and it's optional
+  // styleUrls: []   ← usually not needed if you have global styles
 })
 export class PokemonComparisonComponent {
   private pokemonService = inject(PokemonService);
 
-  searchA = signal<string>('');
-  searchB = signal<string>('');
-  pokemonA = signal<any | null>(null);
-  pokemonB = signal<any | null>(null);
-  loadingA = signal(false);
-  loadingB = signal(false);
-  error = signal<string | null>(null);
+  searchA    = signal<string>('');
+  searchB    = signal<string>('');
+  pokemonA   = signal<any | null>(null);
+  pokemonB   = signal<any | null>(null);
+  loadingA   = signal<boolean>(false);
+  loadingB   = signal<boolean>(false);
+  error      = signal<string | null>(null);
 
   result = computed(() => {
     const a = this.pokemonA();
@@ -30,16 +30,17 @@ export class PokemonComparisonComponent {
   });
 
   loadPokemon(name: string, side: 'A' | 'B') {
-    if (!name.trim()) return;
+    const trimmed = name.trim().toLowerCase();
+    if (!trimmed) return;
 
     const loading = side === 'A' ? this.loadingA : this.loadingB;
     loading.set(true);
     this.error.set(null);
 
-    this.pokemonService.getPokemonDetail(name.toLowerCase()).subscribe({
+    this.pokemonService.getPokemonDetail(trimmed).subscribe({
       next: (data) => {
         if (side === 'A') this.pokemonA.set(data);
-        else this.pokemonB.set(data);
+        else              this.pokemonB.set(data);
         loading.set(false);
       },
       error: () => {
@@ -55,10 +56,10 @@ export class PokemonComparisonComponent {
     this.pokemonA.set(b);
     this.pokemonB.set(a);
 
-    const searchA = this.searchA();
-    const searchB = this.searchB();
-    this.searchA.set(searchB);
-    this.searchB.set(searchA);
+    const sa = this.searchA();
+    const sb = this.searchB();
+    this.searchA.set(sb);
+    this.searchB.set(sa);
   }
 
   clear() {

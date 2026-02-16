@@ -83,7 +83,6 @@ import { FavoritesService } from '../../services/favorites.service';
                 </span>
               }
             </a>
-<<<<<<< HEAD
 
             <!-- NEW: Battle Sim Link -->
             <a 
@@ -92,8 +91,6 @@ import { FavoritesService } from '../../services/favorites.service';
               class="px-4 py-2 rounded-xl font-bold uppercase tracking-wider text-xs text-slate-300 hover:text-indigo-400 hover:bg-indigo-500/10 border border-transparent hover:border-indigo-500/30 transition-all flex items-center gap-2">
               <span>⚔️</span> Battle Sim
             </a>
-=======
->>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
           </div>
         </div>
       </div>
@@ -114,8 +111,4 @@ export class NavbarComponent {
   private favoritesService = inject(FavoritesService);
   
   favoritesCount = this.favoritesService.favoritesCount;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 66480723aebd8db20bbe3ac11e8ffaa80a28ed05
