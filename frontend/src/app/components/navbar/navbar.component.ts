@@ -83,14 +83,6 @@ import { FavoritesService } from '../../services/favorites.service';
                 </span>
               }
             </a>
-
-            <!-- NEW: Battle Sim Link -->
-            <a 
-              routerLink="/compare"
-              routerLinkActive="text-indigo-400 bg-indigo-500/20 border-indigo-500/50 shadow-[0_0_20px_rgba(99,102,241,0.3)]"
-              class="px-4 py-2 rounded-xl font-bold uppercase tracking-wider text-xs text-slate-300 hover:text-indigo-400 hover:bg-indigo-500/10 border border-transparent hover:border-indigo-500/30 transition-all flex items-center gap-2">
-              <span>⚔️</span> Battle Sim
-            </a>
           </div>
         </div>
       </div>
