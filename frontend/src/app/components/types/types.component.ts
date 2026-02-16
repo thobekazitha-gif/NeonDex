@@ -18,19 +18,27 @@ export class TypesComponent implements OnInit {
   selectedType = signal<string | null>(null);
   showStrongestOnly = signal(false);
 
+  // All possible Pokemon types
+  private allTypes = [
+    'normal', 'fire', 'water', 'grass', 'electric', 'ice',
+    'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug',
+    'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy'
+  ];
+
+  // Only show types that have Pokemon in the current dataset
   types = computed(() => {
-    return [
-      'normal', 'fire', 'water', 'grass', 'electric', 'ice',
-      'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug',
-      'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy'
-    ];
+    const grouped = this.groupedPokemon();
+    return this.allTypes.filter(type => {
+      const pokemonOfType = grouped[type];
+      return pokemonOfType && pokemonOfType.length > 0;
+    });
   });
 
   groupedPokemon = computed(() => {
     const all = this.pokemonService.pokemonList();
     const grouped: { [key: string]: any[] } = {};
 
-    this.types().forEach(type => {
+    this.allTypes.forEach(type => {
       grouped[type] = all.filter(p =>
         p.types?.some((t: any) => t.type.name === type)
       );
@@ -60,9 +68,12 @@ export class TypesComponent implements OnInit {
     this.error.set(null);
     
     try {
-      await this.pokemonService.loadAllPokemon();
+      // Load first 300 Pokemon to ensure we get all types including Dark
+      // Dark types start appearing around #197 (Umbreon)
+      await this.pokemonService.loadAllPokemon(300);
     } catch (err) {
       this.error.set('Failed to load Pokémon data');
+      console.error('Error loading Pokemon:', err);
     } finally {
       this.loading.set(false);
     }
