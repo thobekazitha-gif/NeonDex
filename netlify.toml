@@ -1,10 +1,9 @@
 [build]
   base    = "frontend"
   command = "ng build --configuration production"
-  publish = "dist/frontend/browser"   # ← This is the key change: point to /browser
-
+  publish = "dist/frontend"  
 [[redirects]]
   from   = "/*"
   to     = "/index.html"
   status = 200
-  force  = true   # Ensures rewrite applies everywhere
+  force  = true
