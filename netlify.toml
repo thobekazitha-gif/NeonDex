@@ -1,9 +1,26 @@
 [build]
   base    = "frontend"
   command = "ng build --configuration production"
-  publish = "dist/frontend"  
+  publish = "dist/frontend"
+
 [[redirects]]
   from   = "/*"
   to     = "/index.html"
   status = 200
-  force  = true
+  force  = false   # ← Critical: Only rewrite if file truly missing (prevents overriding existing .js/.css)
+
+# Optional: Explicitly protect assets (add if above alone doesn't fix)
+[[redirects]]
+  from   = "/assets/*"
+  status = 200
+  force  = false
+
+[[redirects]]
+  from   = "/*.js"
+  status = 200
+  force  = false
+
+[[redirects]]
+  from   = "/*.css"
+  status = 200
+  force  = false
