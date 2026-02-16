@@ -1,10 +1,10 @@
 [build]
-  base    = "frontend"                          # Already set, but good to confirm
-  command = "ng build --configuration production"  # Or "npm run build" if that's your script
-  publish = "dist/frontend"                     # Matches your current working setup
+  base    = "frontend"
+  command = "ng build --configuration production"
+  publish = "dist/frontend/browser"   # ← This is the key change: point to /browser
 
 [[redirects]]
   from   = "/*"
   to     = "/index.html"
   status = 200
-  force  = true                                 # Optional: forces even if file exists
+  force  = true   # Ensures rewrite applies everywhere
