@@ -26,7 +26,9 @@ export class PokemonDetailComponent implements OnInit {
   loading = signal<boolean>(true);
   error = signal<string | null>(null);
 
-  // Convert Pokemon data to FavoritePokemon format
+  // ──────────────────────────────────────────────
+  //  Favorite format
+  // ──────────────────────────────────────────────
   favoritePokemon = computed(() => {
     const poke = this.pokemon();
     if (!poke) return null;
@@ -42,57 +44,77 @@ export class PokemonDetailComponent implements OnInit {
     };
   });
 
-  // COMPUTED FEATURE 1: Strongest Stat
+  // ──────────────────────────────────────────────
+  //  Existing computed features
+  // ──────────────────────────────────────────────
   strongestStat = computed(() => {
     const poke = this.pokemon();
     if (!poke || !poke.stats) return null;
     
     return poke.stats.reduce((max: any, stat: any) => 
-      stat.base_stat > max.base_stat ? stat : max
-    );
+      stat.base_stat > max.base_stat ? stat : max, poke.stats[0]);
   });
 
-  // COMPUTED FEATURE 2: Total Base Stats (BST)
   totalBaseStats = computed(() => {
     const poke = this.pokemon();
     if (!poke || !poke.stats) return 0;
     
     return poke.stats.reduce((sum: number, stat: any) => 
-      sum + stat.base_stat, 0
-    );
+      sum + stat.base_stat, 0);
   });
 
-  // COMPUTED FEATURE 3: Power Rating (categorize based on BST)
   powerRating = computed(() => {
     const total = this.totalBaseStats();
     if (total >= 600) return { label: 'Legendary', color: 'text-yellow-400' };
-    if (total >= 500) return { label: 'Elite', color: 'text-purple-400' };
-    if (total >= 400) return { label: 'Advanced', color: 'text-blue-400' };
-    if (total >= 300) return { label: 'Standard', color: 'text-green-400' };
+    if (total >= 500) return { label: 'Elite',     color: 'text-purple-400' };
+    if (total >= 400) return { label: 'Advanced',  color: 'text-blue-400'   };
+    if (total >= 300) return { label: 'Standard',  color: 'text-green-400'  };
     return { label: 'Basic', color: 'text-slate-400' };
   });
 
-  // Helper function for type colors
+  // ──────────────────────────────────────────────
+  //  NEW: Battle Readiness Score
+  // ──────────────────────────────────────────────
+  battleReadinessScore = computed(() => {
+    const poke = this.pokemon();
+    if (!poke || !poke.stats || !poke.types) return 0;
+
+    // Extract stats
+    const statsMap = poke.stats.reduce((acc: any, s: any) => {
+      acc[s.stat.name] = s.base_stat;
+      return acc;
+    }, {});
+
+    const totalStats = this.totalBaseStats();
+
+    // Type defensive score (using service's type chart)
+    const typeScore = this.pokemonService.getTypeDefensiveScore(poke.types.map((t: any) => t.type.name));
+
+    // Speed vs Defense weighting
+    const speed = statsMap['speed'] || 0;
+    const defense = statsMap['defense'] || 0;
+    let weightingBonus = 0;
+    if (speed > defense) {
+      weightingBonus = (speed - defense) * 0.5;
+    } else {
+      weightingBonus = (defense - speed) * -0.2;
+    }
+
+    // Final score (you can tweak multipliers)
+    const score = totalStats + (typeScore * 12) + weightingBonus;
+
+    return Math.round(score);
+  });
+
+  // Helper function for type colors (unchanged)
   getTypeColor(type: string): string {
     const colors: { [key: string]: string } = {
-      normal: 'bg-slate-400',
-      fire: 'bg-orange-500',
-      water: 'bg-blue-500',
-      electric: 'bg-yellow-400',
-      grass: 'bg-emerald-500',
-      ice: 'bg-cyan-300',
-      fighting: 'bg-red-600',
-      poison: 'bg-purple-500',
-      ground: 'bg-amber-600',
-      flying: 'bg-indigo-400',
-      psychic: 'bg-pink-500',
-      bug: 'bg-lime-500',
-      rock: 'bg-stone-500',
-      ghost: 'bg-violet-700',
-      dragon: 'bg-indigo-600',
-      dark: 'bg-slate-800',
-      steel: 'bg-slate-500',
-      fairy: 'bg-pink-400'
+      normal: 'bg-slate-400',   fire: 'bg-orange-500',   water: 'bg-blue-500',
+      electric: 'bg-yellow-400', grass: 'bg-emerald-500', ice: 'bg-cyan-300',
+      fighting: 'bg-red-600',   poison: 'bg-purple-500', ground: 'bg-amber-600',
+      flying: 'bg-indigo-400',  psychic: 'bg-pink-500',  bug: 'bg-lime-500',
+      rock: 'bg-stone-500',     ghost: 'bg-violet-700',  dragon: 'bg-indigo-600',
+      dark: 'bg-slate-800',     steel: 'bg-slate-500',   fairy: 'bg-pink-400'
     };
     return colors[type] || 'bg-slate-500';
   }

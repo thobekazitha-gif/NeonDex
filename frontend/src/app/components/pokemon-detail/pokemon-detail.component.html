@@ -73,6 +73,26 @@
               </div>
             </div>
           </div>
+
+          <!-- NEW: Battle Readiness Score -->
+          <div class="glass-card rounded-2xl px-8 py-6 border-2 border-fuchsia-500/30 shadow-[0_0_25px_rgba(217,70,239,0.25)]">
+            <p class="text-fuchsia-400 text-[10px] uppercase font-bold tracking-[0.5em] mb-3">BATTLE READINESS SCORE</p>
+            <div class="flex items-center justify-between">
+              <span class="text-4xl font-black text-white tracking-tighter drop-shadow-[0_0_15px_rgba(217,70,239,0.7)]">
+                {{ battleReadinessScore() }}
+              </span>
+              <div class="text-right">
+                <p class="text-slate-400 text-xs uppercase tracking-widest">NEURAL READINESS</p>
+                <p class="text-fuchsia-300 text-sm font-bold">
+                  @if (battleReadinessScore() >= 750) { ELITE COMBATANT }
+                  @else if (battleReadinessScore() >= 600) { HIGH THREAT }
+                  @else if (battleReadinessScore() >= 450) { VIABLE }
+                  @else { TRAINING REQUIRED }
+                </p>
+              </div>
+            </div>
+          </div>
+
         </div>
 
         <div class="lg:col-span-7 flex flex-col space-y-10">
