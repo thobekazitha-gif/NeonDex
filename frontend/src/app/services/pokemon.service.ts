@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 export interface Pokemon {
   name: string;
@@ -14,6 +14,7 @@ export interface Pokemon {
   height?: number;
   weight?: number;
   species?: any;
+  bst?: number;
 }
 
 export interface PokemonListResponse {
@@ -32,26 +33,26 @@ interface TypeEffectiveness {
 })
 export class PokemonService {
   private apiUrl = 'https://pokeapi.co/api/v2';
-  
+
   pokemonList = signal<Pokemon[]>([]);
   allPokemonLoaded = signal<boolean>(false);
 
   // Type effectiveness chart (offensive multipliers)
   // attacker type → defender type → multiplier
   private typeChart: { [key: string]: TypeEffectiveness } = {
-    normal:   { rock: 0.5, ghost: 0,   steel: 0.5 },
-    fire:     { fire: 0.5, water: 0.5, grass: 2,   ice: 2,   bug: 2,   rock: 0.5, dragon: 0.5, steel: 2   },
-    water:    { fire: 2,   water: 0.5, grass: 0.5, ground: 2, rock: 2,   dragon: 0.5 },
-    electric: { water: 2,  electric: 0.5, grass: 0.5, ground: 0, flying: 2, dragon: 0.5 },
-    grass:    { fire: 0.5, water: 2,   grass: 0.5, poison: 0.5, ground: 2, flying: 0.5, bug: 0.5, rock: 2, dragon: 0.5, steel: 0.5 },
-    ice:      { fire: 0.5, water: 0.5, grass: 2,   ice: 0.5,  ground: 2, flying: 2, dragon: 2, steel: 0.5 },
+    normal:   { rock: 0.5, ghost: 0, steel: 0.5 },
+    fire:     { fire: 0.5, water: 0.5, grass: 2, ice: 2, bug: 2, rock: 0.5, dragon: 0.5, steel: 2 },
+    water:    { fire: 2, water: 0.5, grass: 0.5, ground: 2, rock: 2, dragon: 0.5 },
+    electric: { water: 2, electric: 0.5, grass: 0.5, ground: 0, flying: 2, dragon: 0.5 },
+    grass:    { fire: 0.5, water: 2, grass: 0.5, poison: 0.5, ground: 2, flying: 0.5, bug: 0.5, rock: 2, dragon: 0.5, steel: 0.5 },
+    ice:      { fire: 0.5, water: 0.5, grass: 2, ice: 0.5, ground: 2, flying: 2, dragon: 2, steel: 0.5 },
     fighting: { normal: 2, ice: 2, poison: 0.5, flying: 0.5, psychic: 0.5, bug: 0.5, rock: 2, ghost: 0, dark: 2, steel: 2, fairy: 0.5 },
-    poison:   { grass: 2,  poison: 0.5, ground: 0.5, rock: 0.5, ghost: 0.5, steel: 0, fairy: 2 },
-    ground:   { fire: 2,   electric: 2, grass: 0.5, poison: 2, flying: 0, bug: 0.5, rock: 2, steel: 2 },
+    poison:   { grass: 2, poison: 0.5, ground: 0.5, rock: 0.5, ghost: 0.5, steel: 0, fairy: 2 },
+    ground:   { fire: 2, electric: 2, grass: 0.5, poison: 2, flying: 0, bug: 0.5, rock: 2, steel: 2 },
     flying:   { electric: 0.5, grass: 2, fighting: 2, bug: 2, rock: 0.5, steel: 0.5 },
     psychic:  { fighting: 2, poison: 2, psychic: 0.5, dark: 0, steel: 0.5 },
     bug:      { fire: 0.5, grass: 2, fighting: 0.5, poison: 0.5, flying: 0.5, psychic: 2, ghost: 0.5, dark: 2, steel: 0.5, fairy: 0.5 },
-    rock:     { fire: 2,   ice: 2,     fighting: 0.5, ground: 0.5, flying: 2, bug: 2, steel: 0.5 },
+    rock:     { fire: 2, ice: 2, fighting: 0.5, ground: 0.5, flying: 2, bug: 2, steel: 0.5 },
     ghost:    { normal: 0, psychic: 2, ghost: 2, dark: 0.5 },
     dragon:   { dragon: 2, steel: 0.5, fairy: 0 },
     dark:     { fighting: 0.5, psychic: 2, ghost: 2, dark: 0.5, fairy: 0.5 },
@@ -92,20 +93,37 @@ export class PokemonService {
   }
 
   // ──────────────────────────────────────────────
-  //  Load first 151 Pokemon (Gen 1) – used for types/filtering
+  //  Load Pokemon up to limit (default 300)
+  //  300 covers Gens 1-3 and includes all 18 types
+  //  Dark-type Pokemon start at #197 (Umbreon)
   // ──────────────────────────────────────────────
-  async loadAllPokemon(): Promise<void> {
+  async loadAllPokemon(limit: number = 300): Promise<void> {
     if (this.allPokemonLoaded()) return;
 
     try {
-      const requests = Array.from({ length: 151 }, (_, i) => i + 1).map(id =>
+      console.log(`Loading ${limit} Pokemon...`);
+
+      const requests = Array.from({ length: limit }, (_, i) => i + 1).map(id =>
         this.getPokemonDetail(id.toString()).pipe(catchError(() => of(null)))
       );
 
       const results = await forkJoin(requests).toPromise();
-      const validPokemon = (results || []).filter(p => p !== null) as Pokemon[];
+
+      const validPokemon = (results || [])
+        .filter(p => p !== null)
+        .map(p => ({
+          ...p,
+          // Pre-calculate BST so type grouping and battle sim use it immediately
+          bst: (p.stats || []).reduce(
+            (sum: number, s: any) => sum + (s.base_stat || 0), 0
+          )
+        })) as Pokemon[];
+
       this.pokemonList.set(validPokemon);
       this.allPokemonLoaded.set(true);
+
+      console.log(`Successfully loaded ${validPokemon.length} Pokemon`);
+
     } catch (error) {
       console.error('Failed to load all Pokemon:', error);
       throw error;
@@ -113,7 +131,7 @@ export class PokemonService {
   }
 
   // ──────────────────────────────────────────────
-  //  Simulate battle – returns shape expected by comparison template
+  //  Simulate battle
   // ──────────────────────────────────────────────
   simulateBattle(pokeA: any, pokeB: any): {
     winner: any;
@@ -139,7 +157,12 @@ export class PokemonService {
         score: 50,
         winProbabilityA: 50,
         explanation: 'Invalid Pokémon data – cannot simulate battle.',
-        details: { aTypeScore: 0, bTypeScore: 0, aSpeedAdv: 0, bSpeedAdv: 0, aOffense: 0, bOffense: 0, aTotal: 0, bTotal: 0 }
+        details: {
+          aTypeScore: 0, bTypeScore: 0,
+          aSpeedAdv: 0,  bSpeedAdv: 0,
+          aOffense: 0,   bOffense: 0,
+          aTotal: 0,     bTotal: 0
+        }
       };
     }
 
@@ -155,22 +178,13 @@ export class PokemonService {
     const typeAdvA = this.getTypeAdvantageScore(pokeA, pokeB);
     const typeAdvB = this.getTypeAdvantageScore(pokeB, pokeA);
 
-    // ── Rough defensive / survivability score ────────────────────
+    // ── Defensive / survivability score ──────────────────────────
     const defScoreA = this.getTypeDefensiveScore(pokeA.types?.map((t: any) => t.type.name) || []);
     const defScoreB = this.getTypeDefensiveScore(pokeB.types?.map((t: any) => t.type.name) || []);
 
-    // ── Calculate weighted final scores ──────────────────────────
-    const finalScoreA =
-      totalA * 0.50 +
-      speedA * 0.20 +
-      typeAdvA * 30 +
-      defScoreA * 0.8;
-
-    const finalScoreB =
-      totalB * 0.50 +
-      speedB * 0.20 +
-      typeAdvB * 30 +
-      defScoreB * 0.8;
+    // ── Weighted final scores ─────────────────────────────────────
+    const finalScoreA = totalA * 0.50 + speedA * 0.20 + typeAdvA * 30 + defScoreA * 0.8;
+    const finalScoreB = totalB * 0.50 + speedB * 0.20 + typeAdvB * 30 + defScoreB * 0.8;
 
     // ── Determine winner & probability ───────────────────────────
     let winner = pokeA;
@@ -188,27 +202,22 @@ export class PokemonService {
     probA = Math.max(5, Math.min(95, Math.round(probA)));
 
     const margin = Math.abs(finalScoreA - finalScoreB);
-    const score = Math.round(margin / 5); // rough scale
+    const score = Math.round(margin / 5);
 
     // ── Build explanation ────────────────────────────────────────
-    const explanationLines = [
-      `Total base stats: ${totalA} vs ${totalB}`,
-      `Speed: ${speedA} vs ${speedB}`,
-      `Offensive type advantage: ${typeAdvA.toFixed(1)}× vs ${typeAdvB.toFixed(1)}×`,
-      `Defensive resilience: ${defScoreA} vs ${defScoreB}`
-    ];
-
     const winnerName = winner === pokeA ? 'A' : 'B';
 
     const explanation = [
       `Winner prediction: Pokémon ${winnerName} (${winner.name})`,
-      ...explanationLines,
+      `Total base stats: ${totalA} vs ${totalB}`,
+      `Speed: ${speedA} vs ${speedB}`,
+      `Offensive type advantage: ${typeAdvA.toFixed(1)}× vs ${typeAdvB.toFixed(1)}×`,
+      `Defensive resilience: ${defScoreA} vs ${defScoreB}`,
       '',
       `Win chance estimate: ~${probA}% for Pokémon A (${pokeA.name})`,
-      'This is a simplified model — real battles depend heavily on moves, abilities, items, status conditions, etc.'
+      'This is a simplified model — real battles depend on moves, abilities, items, and status conditions.'
     ].join('\n');
 
-    // ── Return full object expected by template ──────────────────
     return {
       winner,
       loser,
@@ -216,20 +225,20 @@ export class PokemonService {
       winProbabilityA: probA,
       explanation,
       details: {
-        aTypeScore:   Math.round(typeAdvA * 100),
-        bTypeScore:   Math.round(typeAdvB * 100),
-        aSpeedAdv:    speedA - speedB,
-        bSpeedAdv:    speedB - speedA,
-        aOffense:     Math.round(finalScoreA * 0.6),
-        bOffense:     Math.round(finalScoreB * 0.6),
-        aTotal:       totalA,
-        bTotal:       totalB
+        aTypeScore:  Math.round(typeAdvA * 100),
+        bTypeScore:  Math.round(typeAdvB * 100),
+        aSpeedAdv:   speedA - speedB,
+        bSpeedAdv:   speedB - speedA,
+        aOffense:    Math.round(finalScoreA * 0.6),
+        bOffense:    Math.round(finalScoreB * 0.6),
+        aTotal:      totalA,
+        bTotal:      totalB
       }
     };
   }
 
   // ──────────────────────────────────────────────
-  //  Helpers used by simulateBattle
+  //  Private helpers
   // ──────────────────────────────────────────────
   private getTotalStats(pokemon: any): number {
     if (!pokemon?.stats) return 0;
