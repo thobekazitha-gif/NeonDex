@@ -2,7 +2,7 @@
 
 > A modern, cyberpunk-themed Pokémon exploration web application built with Angular 19 and powered by PokéAPI.
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-neondex--22.netlify.app-brightgreen)](https://neondex-22.netlify.app)
+[![Live Demo](https://img.shields.io/badge/_Live_Demo-neondex--22.netlify.app-brightgreen)](https://neondex-22.netlify.app)
 [![Angular](https://img.shields.io/badge/Angular-19-red)](https://angular.io/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38bdf8)](https://tailwindcss.com/)
@@ -10,7 +10,7 @@
 
 ---
 
-## 📋 Table of Contents
+##  Table of Contents
 
 - [Overview](#overview)
 - [Live Deployment](#live-deployment)
@@ -31,13 +31,13 @@
 
 ---
 
-## 🎯 Overview
+##  Overview
 
 NeonDex is a single-page application that provides an interactive interface for browsing, searching, and managing favourite Pokémon. The application features a distinctive neon-cyberpunk aesthetic with glass morphism effects, gradient backgrounds, and glowing UI elements.
 
 ---
 
-## 🚀 Live Deployment
+##  Live Deployment
 
 **[→ View Live Application](https://neondex-22.netlify.app)**
 
@@ -45,7 +45,7 @@ The application is deployed on Netlify with automatic deployments triggered on e
 
 ---
 
-## ✨ Features
+##  Features
 
 ### Core Functionality
 
@@ -66,7 +66,7 @@ The application is deployed on Netlify with automatic deployments triggered on e
 
 ---
 
-## 🔌 API Choice
+##  API Choice
 
 ### Why PokéAPI?
 
@@ -101,7 +101,7 @@ All Pokémon data is fetched directly from PokéAPI at runtime. The Express back
 
 ---
 
-## 🏗️ Architecture Decisions
+##  Architecture Decisions
 
 ### 1. Standalone Components (No NgModules)
 
@@ -156,7 +156,7 @@ Tailwind CSS is used in preference to a component library or custom CSS architec
 
 ---
 
-## 🔄 Data Transformations
+##  Data Transformations
 
 NeonDex performs several transformations on raw PokéAPI data before it reaches the UI.
 
@@ -244,7 +244,7 @@ private typeChart: { [key: string]: TypeEffectiveness } = {
 
 ---
 
-## 💾 Caching Strategy
+##  Caching Strategy
 
 NeonDex uses a multi-layer caching strategy to reduce API calls and improve perceived performance.
 
@@ -298,7 +298,7 @@ PokéAPI is served from a global CDN. Requests for the same resource from multip
 
 ---
 
-## 🎨 Design Principles Applied
+##  Design Principles Applied
 
 ### 1. Clarity — Reducing Cognitive Load
 
@@ -379,7 +379,7 @@ This reduces a 5-step flow to 1 step, making favouriting fast enough that users 
 
 ---
 
-## 🛠️ Technologies
+##  Technologies
 
 ### Frontend Stack
 
@@ -408,7 +408,7 @@ This reduces a 5-step flow to 1 step, making favouriting fast enough that users 
 
 ---
 
-## 📦 Installation
+##  Installation
 
 ### Prerequisites
 
@@ -448,7 +448,7 @@ node server.js
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 NeonDex/
@@ -486,7 +486,7 @@ NeonDex/
 
 ---
 
-## ⚠️ Known Limitations
+##  Known Limitations
 
 ### 1. Limited Pokémon Dataset
 
@@ -518,7 +518,7 @@ The Vercel free tier has a limit of approximately 100 deployments per 24-hour pe
 
 ---
 
-## 🚀 What I Would Add With More Time
+##  What I Would Add With More Time
 
 ### High Priority
 
@@ -561,7 +561,7 @@ PokéAPI provides names and descriptions in multiple languages. i18n support wou
 
 ---
 
-## 📸 Screenshots
+##  Screenshots
 
 > Screenshots of the live application at [neondex-22.netlify.app](https://neondex-22.netlify.app)
 
@@ -577,7 +577,7 @@ PokéAPI provides names and descriptions in multiple languages. i18n support wou
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feat/your-feature`
@@ -594,13 +594,13 @@ refactor: extract battle score logic into helper method
 
 ---
 
-## 📄 License
+##  License
 
 This project is licensed under the **MIT License**. See [LICENSE](LICENSE) for details.
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **[PokéAPI](https://pokeapi.co/)** — Free, open Pokémon data API
 - **The Pokémon Company** — Original franchise and artwork
@@ -610,16 +610,9 @@ This project is licensed under the **MIT License**. See [LICENSE](LICENSE) for d
 
 ---
 
-## 👤 Author
-
-**Thobekazi Thagithag**
-GitHub: [@thobekazitha-gif](https://github.com/thobekazitha-gif)
-
----
-
 <div align="center">
 
-⭐ Star this repo if you find it helpful!
+ Star this repo if you find it helpful!
 
 *Built with Angular 19 · Last Updated: February 2026*
 
